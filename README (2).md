@@ -4,7 +4,7 @@
 
 A personal portfolio website showcasing my work at the intersection of finance, data analytics, AI, and FinTech. Built as a single-page React application with a dark, editorial design aesthetic.
 
-🔗 **Live Site:** [bshrey0601.github.io](https://bshrey0601.github.io)
+🔗 **Live Site:** [bshrey0601.github.io](https://bshrey0601.github.io/ShreyPortfolio/)
 
 ---
 

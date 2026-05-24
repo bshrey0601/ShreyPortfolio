@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shrey Bhatt — AI · Finance · Data Analytics · FinTech</title>
+<meta name="description" content="Shrey Bhatt — MSBA FinTech candidate at WashU. Building financial models, analytics tools, and AI-powered finance solutions across valuation, M&A, and digital assets." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy:    '#070b16',
+          navy2:   '#0b1122',
+          panel:   '#0e1528',
+          ink:     '#eef2fb',
+          inksoft: '#aeb8cd',
+          inkmute: '#697389',
+          accent:  '#4d8dff',
+          accent2: '#38e0c8',
+          gold:    '#e3b873',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body:    ['"Hanken Grotesk"', 'sans-serif'],
+          mono:    ['"JetBrains Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  :root{
+    --bg:#070b16; --bg2:#0b1122; --panel:#0e1528;
+    --ink:#eef2fb; --ink-soft:#aeb8cd; --ink-mute:#697389;
+    --accent:#4d8dff; --accent-2:#38e0c8; --gold:#e3b873;
+    --line:rgba(255,255,255,.08);
+    --line-strong:rgba(255,255,255,.14);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; scroll-padding-top:90px; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Hanken Grotesk',sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  ::selection{ background:rgba(77,141,255,.30); color:#fff; }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:#1b2540; border-radius:20px; border:2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover{ background:#27345a; }
+
+  .font-display{ font-family:'Fraunces',serif; }
+  .font-mono{ font-family:'JetBrains Mono',monospace; }
+
+  #boot{
+    position:fixed; inset:0; z-index:9999; background:var(--bg);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    gap:22px; transition:opacity .7s ease, visibility .7s ease;
+  }
+  #boot.hide{ opacity:0; visibility:hidden; }
+  .boot-mark{ font-family:'Fraunces',serif; font-size:30px; letter-spacing:.02em; color:var(--ink); }
+  .boot-mark span{ color:var(--accent); }
+  .boot-bar{ width:190px; height:2px; background:rgba(255,255,255,.10); border-radius:99px; overflow:hidden; }
+  .boot-bar i{ display:block; height:100%; width:40%; border-radius:99px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    animation:bootslide 1.1s ease-in-out infinite; }
+  @keyframes bootslide{ 0%{ transform:translateX(-120%);} 100%{ transform:translateX(360%);} }
+
+  .progress{ position:fixed; top:0; left:0; height:2px; z-index:120;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%;
+    box-shadow:0 0 14px rgba(77,141,255,.6); }
+
+  .aurora{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+  .aurora .blob{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.5; }
+  .b1{ width:560px; height:560px; left:-140px; top:-120px;
+    background:radial-gradient(circle at 30% 30%, rgba(77,141,255,.55), transparent 65%);
+    animation:float1 16s ease-in-out infinite; }
+  .b2{ width:520px; height:520px; right:-120px; top:40px;
+    background:radial-gradient(circle at 60% 40%, rgba(56,224,200,.40), transparent 65%);
+    animation:float2 19s ease-in-out infinite; }
+  .b3{ width:440px; height:440px; left:38%; bottom:-160px;
+    background:radial-gradient(circle at 50% 50%, rgba(120,110,255,.32), transparent 65%);
+    animation:float3 22s ease-in-out infinite; }
+  @keyframes float1{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(60px,40px) scale(1.08);} }
+  @keyframes float2{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(-50px,30px) scale(1.12);} }
+  @keyframes float3{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(30px,-40px) scale(1.06);} }
+
+  .grid-overlay{ position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 80%);
+            mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 80%);
+  }
+  .noise{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .grad{ background:linear-gradient(100deg,var(--accent) 10%, var(--accent-2) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  .ticker-wrap{ overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.015); }
+  .ticker{ display:inline-flex; gap:42px; white-space:nowrap; padding:13px 0;
+    animation:scrollx 38s linear infinite; }
+  .ticker:hover{ animation-play-state:paused; }
+  @keyframes scrollx{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+  .tick-item{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--ink-mute);
+    letter-spacing:.04em; display:inline-flex; align-items:center; gap:10px; }
+  .tick-item b{ color:var(--accent-2); font-weight:600; }
+  .tick-dot{ width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+
+  .card{ background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.008));
+    border:1px solid var(--line); border-radius:20px; position:relative; overflow:hidden;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), border-color .45s, box-shadow .45s; }
+  .card:hover{ transform:translateY(-6px); border-color:var(--line-strong);
+    box-shadow:0 24px 60px -28px rgba(0,0,0,.8), 0 0 0 1px rgba(77,141,255,.12); }
+  .card-glow::before{ content:""; position:absolute; inset:-1px; border-radius:inherit; padding:1px;
+    background:linear-gradient(130deg, rgba(77,141,255,.5), transparent 40%, transparent 60%, rgba(56,224,200,.4));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    opacity:0; transition:opacity .45s; pointer-events:none; }
+  .card-glow:hover::before{ opacity:1; }
+
+  .chip{ border:1px solid var(--line); background:rgba(255,255,255,.02); border-radius:999px;
+    transition:.3s; }
+  .chip:hover{ border-color:rgba(77,141,255,.5); color:var(--ink); background:rgba(77,141,255,.07);
+    transform:translateY(-2px); }
+
+  .btn{ position:relative; transition:transform .25s ease, box-shadow .3s, background .3s, color .3s, border-color .3s; }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{ background:linear-gradient(100deg,var(--accent),var(--accent-2)); color:#04101f;
+    box-shadow:0 10px 30px -12px rgba(77,141,255,.7); }
+  .btn-primary:hover{ box-shadow:0 16px 38px -12px rgba(56,224,200,.7); }
+  .btn-ghost{ border:1px solid var(--line-strong); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--accent); color:#fff; background:rgba(77,141,255,.08); }
+
+  .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--accent-2); }
+
+  .link-pulse{ position:relative; }
+  .link-pulse::after{ content:""; position:absolute; left:0; bottom:-3px; height:1px; width:0;
+    background:var(--accent); transition:width .35s; }
+  .link-pulse:hover::after{ width:100%; }
+
+  .tl-dot{ box-shadow:0 0 0 4px rgba(77,141,255,.12); }
+
+  .rotator{ display:inline-grid; }
+  .rotator > span{ grid-area:1/1; opacity:0; transform:translateY(12px);
+    animation:rotword 9s infinite; }
+  .rotator > span:nth-child(1){ animation-delay:0s; }
+  .rotator > span:nth-child(2){ animation-delay:3s; }
+  .rotator > span:nth-child(3){ animation-delay:6s; }
+  @keyframes rotword{
+    0%{ opacity:0; transform:translateY(12px);} 5%{ opacity:1; transform:none;}
+    28%{ opacity:1; transform:none;} 33%{ opacity:0; transform:translateY(-12px);} 100%{ opacity:0; }
+  }
+
+  .nav-link{ position:relative; color:var(--ink-soft); transition:color .25s; }
+  .nav-link:hover{ color:var(--ink); }
+  .nav-link.active{ color:#fff; }
+  .nav-link.active::after{ content:""; position:absolute; left:0; right:0; bottom:-7px; height:2px;
+    border-radius:2px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+
+  /* profile photo styles */
+  .profile-ring{
+    position:relative; display:inline-block;
+  }
+  .profile-ring::before{
+    content:""; position:absolute; inset:-4px; border-radius:50%;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2), var(--gold));
+    z-index:-1; animation: ring-spin 6s linear infinite;
+  }
+  @keyframes ring-spin{
+    0%{ filter:hue-rotate(0deg); } 100%{ filter:hue-rotate(360deg); }
+  }
+  .profile-img{
+    width:180px; height:180px; border-radius:50%; object-fit:cover; object-position:center top;
+    border:4px solid var(--bg); display:block;
+  }
+
+  /* chart styles */
+  .chart-bar{ transition: height 1.2s cubic-bezier(.2,.7,.2,1), opacity .8s; }
+  .chart-tooltip{ position:absolute; background:rgba(14,21,40,.95); border:1px solid var(--line-strong);
+    border-radius:10px; padding:8px 12px; font-size:12px; pointer-events:none;
+    z-index:10; white-space:nowrap; backdrop-filter:blur(8px); }
+
+  /* donut chart */
+  .donut-segment{ transition: stroke-dasharray 1.5s cubic-bezier(.2,.7,.2,1); }
+
+  /* sparkline */
+  .sparkline-path{ stroke-dasharray:600; stroke-dashoffset:600; animation: draw-line 2s ease forwards; }
+  @keyframes draw-line{ to{ stroke-dashoffset:0; } }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="boot-mark">Shrey <span>Bhatt</span></div>
+  <div class="boot-bar"><i></i></div>
+</div>
+
+<div class="noise"></div>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const PROFILE_PHOTO = "data:image/jpeg;base64,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";
+
+const LINKS = {
+  email:    "bshrey@wustl.edu",
+  phone:    "314-391-3210",
+  phoneRaw: "+13143913210",
+  linkedin: "https://www.linkedin.com/in/shreybhatt0601",
+  github:   "https://github.com/bshrey0601",
+  location: "St. Louis, MO",
+};
+
+function useReveal(){
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current; if(!el) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:0.14, rootMargin:'0px 0px -8% 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return ref;
+}
+function Reveal({ children, delay=0, className="" }){
+  const ref = useReveal();
+  return <div ref={ref} className={"reveal "+className} style={{ transitionDelay: delay+"ms" }}>{children}</div>;
+}
+
+function Counter({ to, suffix="", duration=1500 }){
+  const [val, setVal] = useState(0);
+  const ref = useRef(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const el = ref.current; if(!el) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting && !started.current){
+          started.current = true;
+          const t0 = performance.now();
+          const tick = (now) => {
+            const p = Math.min(1, (now - t0)/duration);
+            const eased = 1 - Math.pow(1-p, 3);
+            setVal(Math.round(eased * to));
+            if(p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      });
+    }, { threshold:0.5 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [to, duration]);
+  return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
+}
+
+const SECTIONS = [
+  ["about","About"], ["focus","Career Focus"], ["skills","Skills"],
+  ["experience","Experience"], ["projects","Projects"], ["contact","Contact"],
+];
+
+const TICKER = [
+  ["DCF","Valuation"], ["M&A","Deal Screening"], ["KPI","Reporting"], ["SQL","+ Python"],
+  ["EV/EBITDA","Comps"], ["Gemini API","AI Tools"], ["Tableau","Dashboards"], ["Crypto","Digital Assets"],
+  ["FP&A","Forecasting"], ["Reconciliation","Data Validation"],
+];
+
+const STATS = [
+  { to:150, suffix:"+", label:"Employees supported in KPI reporting" },
+  { to:1000, suffix:"+", label:"Transaction records validated daily" },
+  { to:12, suffix:"+", label:"Monthly MIS cycles analyzed" },
+  { to:2, suffix:" yrs", label:"Full-time finance experience" },
+];
+
+const FOCUS = [
+  {
+    tag:"01", title:"Finance & Investment",
+    accent:"var(--accent)",
+    roles:["Financial Analyst","FP&A Analyst","Equity Research Analyst","Investment Analyst","Valuation Analyst","M&A Analyst"],
+  },
+  {
+    tag:"02", title:"Analytics & Business",
+    accent:"var(--accent-2)",
+    roles:["Data Analyst","Business Analyst","Product Analyst (FinTech)","Strategy Analyst","Finance Operations Analyst"],
+  },
+  {
+    tag:"03", title:"FinTech, AI & Crypto",
+    accent:"var(--gold)",
+    roles:["FinTech Analyst","AI Finance Analyst","Crypto Analyst","Digital Assets Analyst","Blockchain / Web3 Analyst","Financial Technology Analyst"],
+  },
+];
+
+const SKILLS = [
+  {
+    title:"Finance & Markets",
+    items:["Financial modeling","DCF valuation","Comparable company analysis","Precedent transactions","Equity research","Forecasting","Variance analysis","Scenario analysis","EBITDA & margin analysis","Three-statement modeling","Financial statement analysis","Crypto market research","Digital assets"],
+  },
+  {
+    title:"Analytics & Data",
+    items:["Excel (PivotTables, XLOOKUP, INDEX-MATCH, SUMIFS)","SQL","Python","Tableau","SQL Server","Data validation","Trend analysis","Dashboarding","Reporting automation","Portfolio analytics"],
+  },
+  {
+    title:"AI & FinTech",
+    items:["AI-powered financial tools","Prompt engineering","Gemini API / Google AI Studio","Financial decision-support tools","Workflow automation","GitHub Pages deployment","Business logic design"],
+  },
+  {
+    title:"Business Communication",
+    items:["PowerPoint (pitch decks, CIM-style)","Executive-ready reporting","Management dashboards","KPI scorecards","Stakeholder communication"],
+  },
+];
+
+const EXPERIENCE = [
+  {
+    role:"Data Operations Associate",
+    org:"Baroda Global Shared Services Limited",
+    place:"Gandhinagar, India",
+    date:"Jan 2024 – Jul 2025",
+    points:[
+      "Built executive-ready Excel reports and PowerPoint dashboards consolidating productivity, performance, and KPI data for 150+ employees — directly informing staffing decisions and senior leadership reviews.",
+      "Validated 1,000+ financial transaction records daily using reconciliation logic and exception flagging to strengthen reporting accuracy and reduce downstream errors.",
+      "Translated 12+ monthly MIS cycles into KPI scorecards, charts, and executive summaries that distilled large datasets into decision-ready narratives.",
+      "Coordinated cross-functional reporting workflows and maintained standardized trackers that improved turnaround time and consistency.",
+      "Handled confidential employee and financial data with discretion, in line with internal compliance and information-security standards.",
+    ],
+  },
+  {
+    role:"Finance Intern",
+    org:"Khodiyar Infrastructure",
+    place:"Gandhinagar, India",
+    date:"Jun 2023 – Dec 2023",
+    points:[
+      "Prepared daily transaction and operations reports by compiling Excel datasets, reconciling records, and flagging exceptions for review.",
+      "Reviewed 500+ records weekly for completeness and accuracy, strengthening internal controls and reporting reliability.",
+      "Built Excel summaries, pivot tables, and charts for recurring management updates — improving visibility into workflow and performance trends.",
+    ],
+  },
+];
+
+const PROJECTS = [
+  {
+    name:"M&A Deal Cracker",
+    date:"Apr 2026 – May 2026",
+    status:"Live",
+    desc:"AI-powered M&A screening web app that analyzes valuation multiples, synergy potential, key deal terms, risk flags, and comparable benchmarks — turning raw deal inputs into executive-ready summaries.",
+    details:[
+      "Built with a Python Flask backend and a polished HTML/CSS/JS frontend deployed on Render.",
+      "Integrated the Gemini API via Google AI Studio for intelligent financial text generation, prompt-engineered to output structured deal memos.",
+      "Users input acquirer and target company details (revenue, EBITDA, deal price, synergies), and the app returns an analyst-grade deal summary with valuation multiples (EV/EBITDA, EV/Revenue), accretion/dilution estimates, synergy sizing, risk factors, and comparable transaction benchmarks.",
+      "Designed to mirror the workflow of a junior investment banking analyst — condensing hours of manual screening into structured, AI-generated output in seconds.",
+    ],
+    tools:["Python","Flask","Google AI Studio","Gemini API","Prompt Engineering","GitHub","Render","Financial Analysis"],
+    impact:"Replicates a junior banker's workflow: combines AI, deal logic, and financial analysis into a practical, deployed decision-support tool. Demonstrates end-to-end product thinking — from financial logic to deployment.",
+    live:"https://m-a-deal-cracker.onrender.com/",
+    code:"https://github.com/bshrey0601/M-A-deal-cracker",
+    chartType:"dealMetrics",
+  },
+  {
+    name:"LA Crime Analytics Dashboard",
+    date:"May 2026",
+    status:"Academic",
+    desc:"Academic Tableau project built at WashU Olin — an interactive dashboard analyzing 1M+ crime incident records across Los Angeles (Jan 2020 – May 2025), spanning 21 police divisions and 140 crime categories, designed to help city leaders identify hotspots, track trends, and allocate resources.",
+    details:[
+      "Sourced and cleaned a 1,002,751-row dataset from Data.gov covering 28 fields including incident dates, geographic coordinates, crime codes, victim demographics, weapon types, and case dispositions across all 21 LAPD divisions.",
+      "Preprocessed victim demographics (handling nulls, invalid sex codes, negative ages, and extreme outliers), converted HHMM time formats into usable datetime fields, and grouped victim ages into analytical buckets.",
+      "Designed three interconnected visualizations: a line chart with time-series forecast projecting future crime counts, a stacked bar chart breaking down crime composition by division, and a rank bump chart tracking how each division's crime ranking shifts month over month.",
+      "Built an interactive filter system with Top N selectors, cross-chart filtering (clicking a stacked bar segment updates all views), hover-based line highlighting on the bump chart, and drill-down filters for date range, area, crime type, and weapon type.",
+    ],
+    tools:["Tableau","Data Cleaning","Data.gov","Time-Series Forecasting","Bump Chart","Stacked Bar Chart","Interactive Dashboards","Data Visualization"],
+    impact:"Demonstrates the ability to take a massive, messy public dataset and turn it into a clean, interactive decision-support tool — the kind of analytics product that city officials and analysts actually use to direct resources and track outcomes.",
+    live:null,
+    code:null,
+    chartType:"crimeDashboard",
+  },
+  {
+    name:"Equity Valuation & Comparable Company Analysis",
+    date:"Aug 2022 – Dec 2022",
+    status:"Case study",
+    desc:"Full-scale equity valuation project combining a 5-year DCF model with comparable company analysis (trading comps) to arrive at an intrinsic value range for a publicly traded company.",
+    details:[
+      "Projected revenue growth, operating margins, and free cash flows over a 5-year forecast horizon using historical trends and management guidance.",
+      "Constructed a WACC-based discounting model with sensitivity analysis across terminal growth rates and discount rates to stress-test valuation assumptions.",
+      "Performed comparable company screening using EV/EBITDA, EV/Revenue, and P/E multiples across 8+ peer companies, with adjustments for size, growth, and margin differences.",
+      "Delivered a football-field valuation chart summarizing base, upside, and downside scenarios alongside trading-comps-implied ranges.",
+    ],
+    tools:["Excel","DCF Modeling","Financial Statement Analysis","Scenario Analysis","WACC","Trading Comps","Football Field Chart"],
+    impact:"Demonstrates core equity research and investment analysis skills — building valuation models from scratch, interpreting financial data, and packaging findings into a clear investment recommendation.",
+    live:null,
+    code:LINKS.github,
+    chartType:"valuation",
+  },
+  {
+    name:"Portfolio Risk & Performance Analysis",
+    date:"Jan 2022 – May 2022",
+    status:"Case study",
+    desc:"Comprehensive portfolio analytics project evaluating a multi-asset investment portfolio across return, volatility, correlation, diversification, and risk-adjusted performance metrics.",
+    details:[
+      "Analyzed historical daily returns for a portfolio of 6 assets spanning U.S. equities, international stocks, bonds, and commodities over a 3-year period.",
+      "Computed Sharpe ratio, Sortino ratio, maximum drawdown, and Value-at-Risk (VaR) at 95% confidence to quantify risk-adjusted performance.",
+      "Built a correlation matrix and rolling-correlation analysis to evaluate diversification effectiveness and detect regime changes.",
+      "Generated efficient frontier plots using Python to identify optimal portfolio weights under mean-variance optimization.",
+    ],
+    tools:["Python","NumPy","Pandas","Matplotlib","Excel","Portfolio Theory","Risk Analytics","Sharpe Ratio","VaR"],
+    impact:"Demonstrates investment analytics, quantitative risk analysis, and portfolio construction thinking — skills directly applicable to asset management, wealth management, and risk teams.",
+    live:null,
+    code:LINKS.github,
+    chartType:"portfolio",
+  },
+  {
+    name:"Digital Payments Adoption Analysis",
+    date:"Jan 2023 – May 2023",
+    status:"Capstone",
+    desc:"Capstone research project analyzing digital payment adoption patterns across 50 consumers from diverse demographics, combining primary survey data with financial forecasting to assess adoption drivers, barriers, and profitability potential.",
+    details:[
+      "Designed and administered a structured survey capturing demographics, payment preferences, trust levels, security concerns, and willingness to adopt digital wallets.",
+      "Performed segmentation analysis (age, income, tech familiarity) to identify high-adoption vs. resistant cohorts.",
+      "Built a 3-year adoption-growth forecast using scenario modeling (optimistic / base / conservative) tied to trust improvement and feature enhancements.",
+      "Delivered strategic recommendations to improve adoption: targeted incentive programs, simplified UX, and trust-building transparency measures.",
+    ],
+    tools:["Excel","Survey Analytics","Forecasting","Sensitivity Analysis","Financial Analytics","Consumer Segmentation","FinTech Strategy"],
+    impact:"Connects FinTech, consumer behavior, and business strategy — with data-backed recommendations on improving trust, security perception, and targeting for digital payment platforms.",
+    live:null,
+    code:LINKS.github,
+    chartType:"adoption",
+  },
+  {
+    name:"Crypto / Digital Assets Research Dashboard",
+    date:"In progress",
+    status:"In Progress",
+    desc:"A crypto market-analytics dashboard tracking price movement, volatility, market cap, trading volume, token performance, and macro/market signals across major digital assets.",
+    details:[
+      "Integrating real-time market data feeds via CoinGecko and CoinMarketCap APIs for BTC, ETH, SOL, and top-50 tokens.",
+      "Building interactive visualizations for price action, 30-day rolling volatility, dominance charts, and volume heatmaps.",
+      "Incorporating on-chain metrics (active addresses, transaction counts) and macro overlays (DXY, Fed funds rate) for contextual analysis.",
+      "Planning deployment as a Tableau Public dashboard and a complementary Python-based CLI tool.",
+    ],
+    tools:["Python","Market APIs","Tableau / Power BI","Crypto Market Data","On-chain Analytics","CoinGecko API"],
+    impact:"Extends my focus into digital assets, market analytics, and FinTech research — demonstrating the ability to work with real-time financial data and build analytical products.",
+    live:null,
+    code:null,
+    chartType:"crypto",
+  },
+];
+
+/* ---- icons ---- */
+const Icon = {
+  github: (p)=>(<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0C17 5 18 5.3 18 5.3c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>),
+  linkedin: (p)=>(<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M20.4 20.4h-3.6v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.7-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.4H3.5V9h3.6v11.4zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7c0-.9-.8-1.7-1.8-1.7z"/></svg>),
+  mail: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>),
+  phone: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg>),
+  pin: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>),
+  doc: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>),
+  arrow: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M5 12h14M13 6l6 6-6 6"/></svg>),
+  ext: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...p}><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>),
+  download: (p)=>(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...p}><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>),
+};
+
+/* =================== CHARTS =================== */
+
+function BarChart({ data, height=200 }){
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  const [tip, setTip] = useState(null);
+  useEffect(()=>{
+    const el = ref.current; if(!el) return;
+    const io = new IntersectionObserver(ent=>{
+      if(ent[0].isIntersecting) { setVisible(true); io.disconnect(); }
+    },{threshold:0.3});
+    io.observe(el); return ()=>io.disconnect();
+  },[]);
+  const maxVal = Math.max(...data.map(d=>d.value));
+  const barW = Math.min(40, (100/data.length - 2));
+  return (
+    <div ref={ref} className="relative" style={{height:height+40}}>
+      <svg width="100%" height={height} viewBox={`0 0 ${data.length*60} ${height}`} preserveAspectRatio="none">
+        {data.map((d,i)=>{
+          const h = visible ? (d.value/maxVal)*(height-30) : 0;
+          return (
+            <g key={i}
+              onMouseEnter={()=>setTip({x:i*60+20, y:height-h-30, label:d.label, value:d.value, suffix:d.suffix||''})}
+              onMouseLeave={()=>setTip(null)}>
+              <rect x={i*60+10} y={height-h-20} width={barW} height={h}
+                rx="4" fill={d.color||"url(#barGrad)"}
+                style={{transition:`height 1.2s cubic-bezier(.2,.7,.2,1) ${i*0.1}s, y 1.2s cubic-bezier(.2,.7,.2,1) ${i*0.1}s`}} />
+              <text x={i*60+10+barW/2} y={height-4} textAnchor="middle"
+                fill="#697389" fontSize="9" fontFamily="'JetBrains Mono'">{d.label}</text>
+            </g>
+          );
+        })}
+        <defs>
+          <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#4d8dff"/>
+            <stop offset="100%" stopColor="#38e0c8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      {tip && (
+        <div className="chart-tooltip" style={{left:tip.x, top:tip.y-10, transform:'translate(-50%,-100%)'}}>
+          <span className="text-accent2 font-mono">{tip.value}{tip.suffix}</span>
+          <span className="text-inkmute ml-2">{tip.label}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DonutChart({ segments, size=180 }){
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  useEffect(()=>{
+    const el = ref.current; if(!el) return;
+    const io = new IntersectionObserver(ent=>{
+      if(ent[0].isIntersecting) { setVisible(true); io.disconnect(); }
+    },{threshold:0.3});
+    io.observe(el); return ()=>io.disconnect();
+  },[]);
+  const r = 60; const c = 2*Math.PI*r;
+  const total = segments.reduce((s,d)=>s+d.value,0);
+  let offset = 0;
+  return (
+    <div ref={ref} className="flex items-center gap-6 flex-wrap">
+      <svg width={size} height={size} viewBox="0 0 160 160">
+        {segments.map((seg,i)=>{
+          const pct = seg.value/total;
+          const dash = visible ? pct*c : 0;
+          const gap = c - dash;
+          const rot = offset*360 - 90;
+          const el = (
+            <circle key={i} cx="80" cy="80" r={r}
+              fill="none" stroke={seg.color} strokeWidth="18"
+              strokeDasharray={`${dash} ${gap}`}
+              strokeLinecap="round"
+              transform={`rotate(${rot} 80 80)`}
+              className="donut-segment"
+              style={{transitionDelay: i*0.2+'s'}} />
+          );
+          offset += pct;
+          return el;
+        })}
+        <text x="80" y="76" textAnchor="middle" fill="#eef2fb" fontSize="22" fontFamily="Fraunces" fontWeight="600">{total}</text>
+        <text x="80" y="96" textAnchor="middle" fill="#697389" fontSize="10" fontFamily="'JetBrains Mono'">TOTAL</text>
+      </svg>
+      <div className="flex flex-col gap-2">
+        {segments.map((seg,i)=>(
+          <div key={i} className="flex items-center gap-2 text-sm">
+            <span className="w-3 h-3 rounded-full shrink-0" style={{background:seg.color}}></span>
+            <span className="text-inksoft">{seg.label}</span>
+            <span className="text-inkmute font-mono text-xs ml-auto pl-3">{seg.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SparklineChart({ points, color="#4d8dff", height=80, label }){
+  const maxY = Math.max(...points);
+  const minY = Math.min(...points);
+  const range = maxY - minY || 1;
+  const w = 280;
+  const pathD = points.map((p,i)=>{
+    const x = (i/(points.length-1))*w;
+    const y = height - ((p-minY)/range)*(height-10) - 5;
+    return (i===0?'M':'L')+`${x},${y}`;
+  }).join(' ');
+  return (
+    <div>
+      {label && <div className="text-[11px] font-mono text-inkmute tracking-widest mb-2">{label}</div>}
+      <svg width="100%" height={height} viewBox={`0 0 ${w} ${height}`} preserveAspectRatio="none">
+        <path d={pathD} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" className="sparkline-path"/>
+        <path d={pathD + ` L${w},${height} L0,${height} Z`} fill={`url(#sparkFill_${color.replace('#','')})`} opacity="0.15"/>
+        <defs>
+          <linearGradient id={`sparkFill_${color.replace('#','')}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color}/>
+            <stop offset="100%" stopColor={color} stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
+/* Project-specific chart data */
+function ProjectChart({ type }){
+  if(type === "dealMetrics"){
+    return (
+      <div className="space-y-4">
+        <div className="font-mono text-[11px] text-accent2 tracking-widest">SAMPLE DEAL METRICS OUTPUT</div>
+        <BarChart data={[
+          {label:"EV/Rev", value:4.2, suffix:"x", color:"#4d8dff"},
+          {label:"EV/EBITDA", value:12.8, suffix:"x", color:"#5e9aff"},
+          {label:"P/E", value:22.4, suffix:"x", color:"#38e0c8"},
+          {label:"Synergy", value:8.5, suffix:"%", color:"#38e0c8"},
+          {label:"IRR", value:18.2, suffix:"%", color:"#e3b873"},
+        ]} height={160} />
+        <div className="grid grid-cols-3 gap-3 mt-2">
+          {[{l:"Deal Value",v:"$2.4B"},{l:"Accretion",v:"+12%"},{l:"Risk Score",v:"Medium"}].map((m,i)=>(
+            <div key={i} className="text-center p-3 rounded-xl bg-white/[.02] border border-white/[.06]">
+              <div className="text-accent2 font-mono text-lg font-semibold">{m.v}</div>
+              <div className="text-inkmute text-[11px] mt-1">{m.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if(type === "valuation"){
+    return (
+      <div className="space-y-4">
+        <div className="font-mono text-[11px] text-accent2 tracking-widest">FOOTBALL FIELD — VALUATION RANGES ($)</div>
+        <div className="space-y-3 mt-3">
+          {[
+            {label:"DCF Base",low:42,high:58,color:"#4d8dff",mid:50},
+            {label:"DCF Bull",low:55,high:72,color:"#38e0c8",mid:63},
+            {label:"DCF Bear",low:28,high:42,color:"#e3b873",mid:35},
+            {label:"Comps",low:45,high:62,color:"#7c6aff",mid:53},
+          ].map((r,i)=>(
+            <div key={i} className="flex items-center gap-3">
+              <div className="w-20 text-[12px] text-inkmute font-mono shrink-0">{r.label}</div>
+              <div className="flex-1 relative h-6 rounded-full bg-white/[.03]">
+                <div className="absolute h-full rounded-full" style={{
+                  left: (r.low/80*100)+'%',
+                  width: ((r.high-r.low)/80*100)+'%',
+                  background: r.color, opacity:0.3
+                }}></div>
+                <div className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2" style={{
+                  left: (r.mid/80*100)+'%', borderColor:r.color, background:r.color
+                }}></div>
+              </div>
+              <div className="text-[11px] font-mono text-inkmute w-16 text-right">${r.low}–${r.high}</div>
+            </div>
+          ))}
+        </div>
+        <div className="text-[11px] text-inkmute mt-2 italic">Implied equity value per share across methodologies</div>
+      </div>
+    );
+  }
+  if(type === "portfolio"){
+    return (
+      <div className="space-y-5">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="font-mono text-[11px] text-accent2 tracking-widest mb-3">ASSET ALLOCATION</div>
+            <DonutChart segments={[
+              {label:"US Equities", value:35, color:"#4d8dff"},
+              {label:"Int'l Stocks", value:20, color:"#38e0c8"},
+              {label:"Bonds", value:25, color:"#e3b873"},
+              {label:"Commodities", value:12, color:"#7c6aff"},
+              {label:"Cash", value:8, color:"#697389"},
+            ]} size={150} />
+          </div>
+          <div>
+            <div className="font-mono text-[11px] text-accent2 tracking-widest mb-3">PORTFOLIO PERFORMANCE</div>
+            <SparklineChart points={[100,102,98,105,103,110,108,115,112,118,120,116,122,128,125,130,135]} color="#38e0c8" height={90} />
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              {[{l:"Sharpe",v:"1.42"},{l:"Max DD",v:"-8.3%"},{l:"Ann. Ret",v:"+14.2%"},{l:"VaR 95%",v:"-2.1%"}].map((m,i)=>(
+                <div key={i} className="text-center p-2 rounded-lg bg-white/[.02] border border-white/[.06]">
+                  <div className="text-ink font-mono text-sm font-semibold">{m.v}</div>
+                  <div className="text-inkmute text-[10px]">{m.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if(type === "adoption"){
+    return (
+      <div className="space-y-4">
+        <div className="font-mono text-[11px] text-accent2 tracking-widest">ADOPTION FORECAST (3-YEAR)</div>
+        <SparklineChart points={[22,25,28,32,37,42,48,54,60,65,70,74]} color="#4d8dff" height={80} label="OPTIMISTIC SCENARIO" />
+        <SparklineChart points={[22,24,26,29,32,36,40,44,48,51,54,56]} color="#38e0c8" height={80} label="BASE SCENARIO" />
+        <SparklineChart points={[22,23,24,25,27,29,31,33,35,37,39,40]} color="#e3b873" height={80} label="CONSERVATIVE SCENARIO" />
+        <div className="grid grid-cols-3 gap-3 mt-2">
+          {[{l:"Trust Impact",v:"+34%"},{l:"UX Simplification",v:"+22%"},{l:"Security Perception",v:"+28%"}].map((m,i)=>(
+            <div key={i} className="text-center p-3 rounded-xl bg-white/[.02] border border-white/[.06]">
+              <div className="text-accent2 font-mono text-sm font-semibold">{m.v}</div>
+              <div className="text-inkmute text-[10px] mt-1">{m.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if(type === "crimeDashboard"){
+    const divisions = [
+      {name:"77th Street",crimes:68200,color:"#4d8dff"},
+      {name:"Southwest",crimes:55800,color:"#5e9aff"},
+      {name:"Pacific",crimes:52400,color:"#38e0c8"},
+      {name:"N Hollywood",crimes:50100,color:"#49d4c0"},
+      {name:"Southeast",crimes:48900,color:"#e3b873"},
+      {name:"Hollywood",crimes:47200,color:"#d4a85e"},
+      {name:"Central",crimes:45600,color:"#7c6aff"},
+      {name:"Olympic",crimes:43100,color:"#8a7aff"},
+    ];
+    const monthlyTrend = [15800,16200,17100,16800,17400,18200,17900,18600,17200,16400,15900,16100,16500,17000,17800,17200,17600,18400,18100,18800,17500,16800,16200,16600,17100,17600,18200,17800,18100,18900,18500,19200,17900,17100,16500,16900,17400,18000,18800,18300,18700,19400,19000,19800,18400,17600,17000,17300,17800,18400,19100,18700,19100,19800,19400,20100,18800,18000,17400,17700,18200,18800,19600,19100];
+    const crimeTypes = [
+      {type:"Theft",pct:32, color:"#4d8dff"},
+      {type:"Assault",pct:22, color:"#38e0c8"},
+      {type:"Burglary",pct:15, color:"#e3b873"},
+      {type:"Vehicle Theft",pct:12, color:"#7c6aff"},
+      {type:"Vandalism",pct:8, color:"#ff6b8a"},
+      {type:"Other",pct:11, color:"#697389"},
+    ];
+    return (
+      <div className="space-y-5">
+        <div className="grid grid-cols-4 gap-3">
+          {[{l:"Total Records",v:"1M+",c:"text-accent"},{l:"Police Divisions",v:"21",c:"text-accent2"},{l:"Crime Categories",v:"140",c:"text-gold"},{l:"Date Range",v:"5+ yrs",c:"text-ink"}].map((m,i)=>(
+            <div key={i} className="text-center p-3 rounded-xl bg-white/[.02] border border-white/[.06]">
+              <div className={m.c+" font-mono text-lg font-semibold"}>{m.v}</div>
+              <div className="text-inkmute text-[10px] mt-1">{m.l}</div>
+            </div>
+          ))}
+        </div>
+        <div className="font-mono text-[11px] text-accent2 tracking-widest">MONTHLY CRIME TREND (WITH FORECAST)</div>
+        <SparklineChart points={monthlyTrend} color="#4d8dff" height={80} />
+        <div className="grid grid-cols-2 gap-5">
+          <div>
+            <div className="font-mono text-[11px] text-accent2 tracking-widest mb-3">TOP DIVISIONS BY INCIDENTS</div>
+            <div className="space-y-2">
+              {divisions.map((d,i)=>{
+                const pct = (d.crimes / divisions[0].crimes)*100;
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="w-20 text-[11px] text-inkmute font-mono truncate shrink-0">{d.name}</div>
+                    <div className="flex-1 h-4 rounded-full bg-white/[.03] overflow-hidden">
+                      <div className="h-full rounded-full" style={{width:pct+'%', background:d.color, transition:'width 1.5s ease'}}></div>
+                    </div>
+                    <div className="text-[10px] font-mono text-inkmute w-12 text-right">{(d.crimes/1000).toFixed(1)}K</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <div className="font-mono text-[11px] text-accent2 tracking-widest mb-3">CRIME COMPOSITION</div>
+            <DonutChart segments={crimeTypes.map(c=>({label:c.type, value:c.pct, color:c.color}))} size={140} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if(type === "crypto"){
+    return (
+      <div className="space-y-4">
+        <div className="font-mono text-[11px] text-accent2 tracking-widest">MARKET OVERVIEW (SAMPLE)</div>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            {sym:"BTC",price:"$67,420",chg:"+2.4%",spark:[60,62,58,65,63,67,64,68,70,67]},
+            {sym:"ETH",price:"$3,850",chg:"+1.8%",spark:[32,34,31,35,33,36,38,37,39,38]},
+            {sym:"SOL",price:"$178",chg:"+5.2%",spark:[120,125,118,130,140,135,150,155,170,178]},
+            {sym:"AVAX",price:"$42",chg:"-0.8%",spark:[48,46,44,42,45,43,41,40,42,42]},
+          ].map((t,i)=>(
+            <div key={i} className="p-3 rounded-xl bg-white/[.02] border border-white/[.06]">
+              <div className="flex justify-between items-center mb-1">
+                <span className="font-mono text-sm font-semibold text-ink">{t.sym}</span>
+                <span className={"font-mono text-xs "+(t.chg.startsWith('+')?'text-accent2':'text-red-400')}>{t.chg}</span>
+              </div>
+              <div className="text-inkmute text-xs mb-2">{t.price}</div>
+              <SparklineChart points={t.spark} color={t.chg.startsWith('+')?'#38e0c8':'#f87171'} height={40} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return null;
+}
+
+/* =================== NAV =================== */
+function Nav(){
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("about");
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const ids = SECTIONS.map(s => s[0]);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin:"-45% 0px -50% 0px" });
+    ids.forEach(id => { const el = document.getElementById(id); if(el) io.observe(el); });
+    return () => io.disconnect();
+  }, []);
+
+  const go = (id) => { setOpen(false); document.getElementById(id)?.scrollIntoView({ behavior:'smooth' }); };
+
+  return (
+    <header className={"fixed top-0 inset-x-0 z-[110] transition-all duration-300 " +
+      (scrolled ? "backdrop-blur-xl bg-navy/80 border-b border-white/10" : "bg-transparent")}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between">
+        <a onClick={()=>go('about')} className="cursor-pointer font-display text-xl tracking-tight">
+          Shrey<span className="text-accent">.</span><span className="text-inkmute font-body text-sm font-mono ml-1 align-middle hidden sm:inline">/ fintech</span>
+        </a>
+
+        <nav className="hidden lg:flex items-center gap-8 text-[15px] font-medium">
+          {SECTIONS.map(([id,label]) => (
+            <a key={id} onClick={()=>go(id)}
+               className={"nav-link cursor-pointer "+(active===id?"active":"")}>{label}</a>
+          ))}
+        </nav>
+
+        <div className="hidden lg:flex items-center gap-3">
+          <a href={LINKS.github} target="_blank" rel="noopener" className="text-inksoft hover:text-white transition" aria-label="GitHub"><Icon.github className="w-5 h-5"/></a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener" className="text-inksoft hover:text-white transition" aria-label="LinkedIn"><Icon.linkedin className="w-5 h-5"/></a>
+          <a onClick={()=>go('contact')} className="btn btn-primary cursor-pointer px-4 py-2 rounded-full text-sm font-semibold">Contact</a>
+        </div>
+
+        <button onClick={()=>setOpen(o=>!o)} className="lg:hidden p-2 -mr-2 text-ink" aria-label="Menu">
+          <div className="w-6 flex flex-col gap-[5px]">
+            <span className={"h-[2px] bg-current rounded transition-all "+(open?"rotate-45 translate-y-[7px]":"")}></span>
+            <span className={"h-[2px] bg-current rounded transition-all "+(open?"opacity-0":"")}></span>
+            <span className={"h-[2px] bg-current rounded transition-all "+(open?"-rotate-45 -translate-y-[7px]":"")}></span>
+          </div>
+        </button>
+      </div>
+
+      <div className={"lg:hidden overflow-hidden transition-all duration-400 backdrop-blur-xl bg-navy/95 border-b border-white/10 "+(open?"max-h-[520px]":"max-h-0")}>
+        <div className="px-6 py-4 flex flex-col gap-1">
+          {SECTIONS.map(([id,label]) => (
+            <a key={id} onClick={()=>go(id)}
+               className={"py-2.5 text-[17px] cursor-pointer border-b border-white/5 "+(active===id?"text-white font-semibold":"text-inksoft")}>{label}</a>
+          ))}
+          <div className="flex gap-4 pt-4">
+            <a href={LINKS.github} target="_blank" rel="noopener" className="text-inksoft"><Icon.github className="w-6 h-6"/></a>
+            <a href={LINKS.linkedin} target="_blank" rel="noopener" className="text-inksoft"><Icon.linkedin className="w-6 h-6"/></a>
+            <a href={"mailto:"+LINKS.email} className="text-inksoft"><Icon.mail className="w-6 h-6"/></a>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* =================== HERO =================== */
+function Hero(){
+  const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior:'smooth' });
+  return (
+    <section id="top" className="relative pt-[120px] pb-10 sm:pt-[150px]">
+      <div className="aurora"><div className="blob b1"></div><div className="blob b2"></div><div className="blob b3"></div></div>
+      <div className="grid-overlay"></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-10">
+          <div className="flex-1 max-w-3xl">
+            <div className="reveal in flex items-center gap-3 mb-6">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent2 opacity-60"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent2"></span>
+              </span>
+              <span className="eyebrow">Open to internships & full-time roles · {LINKS.location}</span>
+            </div>
+
+            <h1 className="reveal in font-display text-[clamp(2.6rem,8vw,5.6rem)] leading-[1.02] font-semibold tracking-[-0.02em]">
+              Shrey Bhatt
+            </h1>
+
+            <p className="reveal in mt-5 text-[clamp(1.15rem,2.6vw,1.7rem)] text-inksoft font-medium leading-snug">
+              I turn complex financial data into{' '}
+              <span className="rotator align-baseline">
+                <span className="grad font-semibold">decision-ready insight.</span>
+                <span className="grad font-semibold">deal-style narratives.</span>
+                <span className="grad font-semibold">AI-powered tools.</span>
+              </span>
+            </p>
+
+            <p className="reveal in mt-6 max-w-2xl text-[1.02rem] text-inkmute leading-relaxed">
+              <span className="font-mono text-[13px] text-accent2 tracking-wide">MSBA · FinTech @ WashU Olin</span>
+              <span className="block mt-3 text-inksoft">
+                AI + Finance + Data Analytics. I build financial models, analytics dashboards, and
+                AI-powered finance solutions across valuation, M&amp;A, and digital assets.
+              </span>
+            </p>
+
+            <div className="reveal in mt-9 flex flex-wrap items-center gap-3">
+              <a onClick={()=>go('projects')} className="btn btn-primary cursor-pointer px-6 py-3 rounded-full font-semibold flex items-center gap-2">View Projects <Icon.arrow className="w-4 h-4"/></a>
+              <a href={LINKS.github} target="_blank" rel="noopener" className="btn btn-ghost px-5 py-3 rounded-full font-semibold flex items-center gap-2"><Icon.github className="w-4 h-4"/> GitHub</a>
+              <a href={LINKS.linkedin} target="_blank" rel="noopener" className="btn btn-ghost px-5 py-3 rounded-full font-semibold flex items-center gap-2"><Icon.linkedin className="w-4 h-4"/> LinkedIn</a>
+              <a onClick={()=>go('contact')} className="btn btn-ghost cursor-pointer px-6 py-3 rounded-full font-semibold">Contact Me</a>
+            </div>
+          </div>
+
+          {/* Profile Photo */}
+          <div className="reveal in shrink-0 hidden lg:block">
+            <div className="profile-ring">
+              <img src={PROFILE_PHOTO} alt="Shrey Bhatt" className="profile-img" />
+            </div>
+          </div>
+        </div>
+
+        {/* stat band */}
+        <div className="reveal in mt-16 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {STATS.map((s,i)=>(
+            <div key={i} className="card card-glow p-5 sm:p-6">
+              <div className="font-display text-4xl sm:text-5xl font-semibold grad"><Counter to={s.to} suffix={s.suffix}/></div>
+              <div className="mt-2 text-[13px] text-inkmute leading-snug">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ticker */}
+      <div className="reveal in mt-14 ticker-wrap">
+        <div className="flex">
+          {[0,1].map(k=>(
+            <div className="ticker" key={k} aria-hidden={k===1}>
+              {TICKER.map((t,i)=>(
+                <span className="tick-item" key={k+'-'+i}><span className="tick-dot"></span><b>{t[0]}</b> {t[1]}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== SECTION HEADER =================== */
+function SectionHead({ kicker, title, sub }){
+  return (
+    <Reveal className="mb-12">
+      <div className="eyebrow mb-3">{kicker}</div>
+      <h2 className="font-display text-[clamp(2rem,5vw,3.2rem)] font-semibold tracking-[-0.02em] leading-tight">{title}</h2>
+      {sub && <p className="mt-4 max-w-2xl text-inkmute text-[1.02rem] leading-relaxed">{sub}</p>}
+    </Reveal>
+  );
+}
+
+/* =================== ABOUT =================== */
+function About(){
+  return (
+    <section id="about" className="relative py-24 sm:py-28">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <div className="lg:col-span-7">
+            <div className="eyebrow mb-3">About</div>
+
+            {/* Mobile photo */}
+            <Reveal className="lg:hidden mb-8 flex justify-center">
+              <div className="profile-ring">
+                <img src={PROFILE_PHOTO} alt="Shrey Bhatt" className="profile-img" />
+              </div>
+            </Reveal>
+
+            <Reveal>
+              <p className="font-display text-[clamp(1.5rem,3.2vw,2.2rem)] leading-[1.35] font-normal text-ink">
+                I'm a graduate student at <span className="grad">Washington University in St. Louis</span> studying
+                Business Analytics with a FinTech concentration — sitting right where finance, data, and AI meet.
+              </p>
+            </Reveal>
+            <Reveal delay={120}>
+              <p className="mt-7 text-inksoft leading-relaxed text-[1.05rem]">
+                My background blends financial reporting, KPI dashboards, valuation, and AI-powered finance tools.
+                I'm especially drawn to the intersection of artificial intelligence, financial markets, digital
+                assets, crypto, and business analytics. What I enjoy most is building practical tools that help
+                teams analyze financial data, evaluate opportunities, track performance, and make faster, more
+                structured decisions.
+              </p>
+            </Reveal>
+            <Reveal delay={220}>
+              <p className="mt-5 text-inksoft leading-relaxed">
+                Before WashU, I spent two years in full-time finance roles in India — first as a Finance Intern at Khodiyar Infrastructure, where I built reporting systems from scratch, and then as a Data Operations Associate at Baroda Global Shared Services, a subsidiary of Bank of Baroda. There I managed KPI reporting for 150+ employees, validated 1,000+ daily financial transactions, and delivered 12+ monthly MIS cycles to senior leadership.
+              </p>
+            </Reveal>
+            <Reveal delay={300}>
+              <p className="mt-5 text-inkmute leading-relaxed">
+                That experience taught me reporting accuracy, the discipline of working with confidential financial data, and how to translate raw numbers into executive-ready narratives. My coursework and projects at WashU have pushed me deeper into valuation modeling, M&A deal logic, portfolio analytics, and AI-driven finance tools. I'm now looking for roles where I can combine all of this — financial judgment, data analysis, and technology — to drive real decisions.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="lg:col-span-5">
+            <Reveal delay={120}>
+              <div className="card p-7">
+                <div className="font-mono text-[12px] text-accent2 tracking-widest mb-5">// AT A GLANCE</div>
+                <dl className="space-y-4 text-[15px]">
+                  {[
+                    ["Program","M.S. Business Analytics — FinTech"],
+                    ["School","WashU · Olin Business School"],
+                    ["Graduation","December 2026"],
+                    ["GPA","3.5 / 4.0"],
+                    ["Undergrad","BBA — KSV University, India"],
+                    ["Based in","St. Louis, MO"],
+                  ].map(([k,v],i)=>(
+                    <div key={i} className="flex items-baseline justify-between gap-4 border-b border-white/5 pb-3 last:border-0 last:pb-0">
+                      <dt className="text-inkmute text-[13px] uppercase tracking-wide font-mono shrink-0">{k}</dt>
+                      <dd className="text-ink font-medium text-right">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Financial Modeling","Corporate Finance","Risk & Decision Analysis","Business Strategy","AI & Machine Learning","Digital Assets"].map((c,i)=>(
+                    <span key={i} className="chip px-3 py-1.5 text-[12px] text-inksoft font-mono">{c}</span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={250}>
+              <div className="card p-7 mt-5">
+                <div className="font-mono text-[12px] text-accent2 tracking-widest mb-5">// WHAT DRIVES ME</div>
+                <div className="space-y-4 text-[14px] text-inksoft leading-relaxed">
+                  <p>I believe finance is entering its most exciting era — where AI and real-time data are transforming how we model risk, screen deals, and make investment decisions. I want to be at the center of that shift.</p>
+                  <p>Outside of finance and tech, I'm passionate about cricket, exploring new cuisines, and staying up to date with crypto markets and macro trends.</p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== CAREER FOCUS =================== */
+function Focus(){
+  return (
+    <section id="focus" className="relative py-24 sm:py-28 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <SectionHead
+          kicker="Career Focus"
+          title="Target Roles"
+          sub="My goal is to work at the intersection of finance, analytics, technology, AI, and digital assets — bringing financial intuition and analytical rigor to the same problem."
+        />
+        <div className="grid md:grid-cols-3 gap-5">
+          {FOCUS.map((f,i)=>(
+            <Reveal key={i} delay={i*110}>
+              <div className="card card-glow p-7 h-full">
+                <div className="flex items-center justify-between mb-5">
+                  <span className="font-mono text-[12px] tracking-widest" style={{ color:f.accent }}>{f.tag}</span>
+                  <span className="h-8 w-8 rounded-full grid place-items-center" style={{ background:"rgba(255,255,255,.04)", border:"1px solid var(--line)" }}>
+                    <span className="h-2 w-2 rounded-full" style={{ background:f.accent }}></span>
+                  </span>
+                </div>
+                <h3 className="font-display text-xl font-semibold mb-4">{f.title}</h3>
+                <ul className="space-y-2.5">
+                  {f.roles.map((r,j)=>(
+                    <li key={j} className="flex items-center gap-2.5 text-inksoft text-[15px]">
+                      <span className="h-1 w-1 rounded-full bg-white/30"></span>{r}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== SKILLS =================== */
+function Skills(){
+  return (
+    <section id="skills" className="relative py-24 sm:py-28 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <SectionHead kicker="Capabilities" title="Skills" sub="A finance-first toolkit, sharpened with data and AI." />
+        <div className="grid md:grid-cols-2 gap-5">
+          {SKILLS.map((g,i)=>(
+            <Reveal key={i} delay={(i%2)*110}>
+              <div className="card p-7 h-full">
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="font-mono text-accent2 text-sm">0{i+1}</span>
+                  <h3 className="font-display text-lg font-semibold">{g.title}</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {g.items.map((s,j)=>(
+                    <span key={j} className="chip px-3.5 py-2 text-[13px] text-inksoft">{s}</span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== EXPERIENCE =================== */
+function Experience(){
+  return (
+    <section id="experience" className="relative py-24 sm:py-28 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <SectionHead kicker="Track Record" title="Experience" sub="Two years building the reporting, reconciliation, and analytics backbone that finance teams rely on." />
+        <div className="relative pl-6 sm:pl-8 border-l border-white/10 space-y-10">
+          {EXPERIENCE.map((e,i)=>(
+            <Reveal key={i} delay={i*100}>
+              <div className="relative">
+                <span className="tl-dot absolute -left-[33px] sm:-left-[41px] top-1.5 h-3.5 w-3.5 rounded-full bg-accent"></span>
+                <div className="card p-7">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-display text-xl font-semibold text-ink">{e.role}</h3>
+                      <div className="text-accent2 font-medium mt-1">{e.org}</div>
+                      <div className="text-inkmute text-sm mt-0.5 font-mono">{e.place}</div>
+                    </div>
+                    <span className="chip px-3.5 py-1.5 text-[12px] text-inksoft font-mono whitespace-nowrap">{e.date}</span>
+                  </div>
+                  <ul className="mt-5 space-y-3">
+                    {e.points.map((p,j)=>(
+                      <li key={j} className="flex gap-3 text-inksoft leading-relaxed text-[15px]">
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-accent shrink-0"></span>{p}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== PROJECTS =================== */
+function ProjectCard({ p, i }){
+  const featured = i === 0;
+  const inProgress = p.status === "In Progress";
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <Reveal delay={(i%2)*110} className={featured ? "md:col-span-2" : ""}>
+      <div className={"card card-glow p-7 h-full flex flex-col"}>
+        <div className="flex items-center gap-3 mb-3">
+          <span className={"px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wide "+
+            (p.status==="Live" ? "bg-accent2/15 text-accent2 border border-accent2/30"
+             : p.status==="Academic" ? "bg-accent/15 text-accent border border-accent/30"
+             : inProgress ? "bg-gold/15 text-gold border border-gold/30"
+             : "bg-white/5 text-inksoft border border-white/10")}>
+            {p.status==="Live" ? "● LIVE" : p.status==="Academic" ? "◆ ACADEMIC" : p.status.toUpperCase()}
+          </span>
+          <span className="text-inkmute text-xs font-mono">{p.date}</span>
+        </div>
+        <h3 className={"font-display font-semibold leading-tight "+(featured?"text-2xl sm:text-3xl":"text-xl")}>{p.name}</h3>
+        <p className="mt-3 text-inksoft leading-relaxed text-[15px]">{p.desc}</p>
+
+        {/* Expandable Details */}
+        {p.details && (
+          <div className="mt-4">
+            <button onClick={()=>setExpanded(!expanded)}
+              className="text-accent text-[13px] font-mono tracking-wide hover:text-accent2 transition flex items-center gap-2">
+              {expanded ? "HIDE DETAILS" : "VIEW DETAILS"}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"
+                style={{transform:expanded?'rotate(180deg)':'none', transition:'.3s'}}>
+                <path d="M3 4.5L6 7.5L9 4.5"/>
+              </svg>
+            </button>
+            <div style={{maxHeight:expanded?'800px':'0', overflow:'hidden', transition:'max-height .5s ease'}}>
+              <ul className="mt-3 space-y-2.5">
+                {p.details.map((d,j)=>(
+                  <li key={j} className="flex gap-3 text-inkmute leading-relaxed text-[14px]">
+                    <span className="mt-2 h-1 w-1 rounded-full bg-accent/50 shrink-0"></span>{d}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-5">
+          <div className="font-mono text-[11px] text-inkmute tracking-widest mb-2">TOOLS</div>
+          <div className="flex flex-wrap gap-2">
+            {p.tools.map((t,j)=>(<span key={j} className="chip px-3 py-1.5 text-[12px] text-inksoft">{t}</span>))}
+          </div>
+        </div>
+
+        {/* Chart */}
+        {p.chartType && (
+          <Reveal delay={200}>
+            <div className="mt-6 p-5 rounded-2xl bg-white/[.01] border border-white/[.05]">
+              <ProjectChart type={p.chartType} />
+            </div>
+          </Reveal>
+        )}
+
+        <div className="mt-6">
+          <div className="font-mono text-[11px] text-accent2 tracking-widest mb-2">WHY IT MATTERS</div>
+          <p className="text-inkmute leading-relaxed text-[14px]">{p.impact}</p>
+        </div>
+
+        <div className="flex flex-wrap gap-3 mt-6">
+          {p.live && (
+            <a href={p.live} target="_blank" rel="noopener" className="btn btn-primary px-4 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2">Live Demo <Icon.ext className="w-3.5 h-3.5"/></a>
+          )}
+          {inProgress && (
+            <span className="px-4 py-2.5 rounded-full text-sm font-semibold border border-gold/30 text-gold font-mono">Coming soon</span>
+          )}
+          {p.code && (
+            <a href={p.code} target="_blank" rel="noopener" className="btn btn-ghost px-4 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2"><Icon.github className="w-4 h-4"/> GitHub</a>
+          )}
+        </div>
+      </div>
+    </Reveal>
+  );
+}
+
+function Projects(){
+  return (
+    <section id="projects" className="relative py-24 sm:py-28 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <SectionHead kicker="Featured Work" title="Projects" sub="From a deployed AI deal tool to valuation models and portfolio analytics — work that blends finance, data, and technology. Click 'View Details' on any project for a deeper look at methodology and outputs." />
+        <div className="grid md:grid-cols-2 gap-5">
+          {PROJECTS.map((p,i)=>(<ProjectCard key={i} p={p} i={i}/>))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== CONTACT =================== */
+function Contact(){
+  const items = [
+    { icon:Icon.mail,  label:"Email",    value:LINKS.email,                href:"mailto:"+LINKS.email },
+    { icon:Icon.phone, label:"Phone",    value:LINKS.phone,                href:"tel:"+LINKS.phoneRaw },
+    { icon:Icon.linkedin, label:"LinkedIn", value:"in/shreybhatt0601",     href:LINKS.linkedin },
+    { icon:Icon.github, label:"GitHub",   value:"github.com/bshrey0601",   href:LINKS.github },
+    { icon:Icon.pin,   label:"Location", value:LINKS.location,             href:null },
+  ];
+  return (
+    <section id="contact" className="relative py-24 sm:py-28 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-5">
+            <div className="eyebrow mb-3">Contact</div>
+            <Reveal>
+              <h2 className="font-display text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[1.05]">
+                Let's build something <span className="grad">data-driven.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={120}>
+              <p className="mt-5 text-inksoft leading-relaxed max-w-md">
+                Recruiters and teams — I'd love to talk about analyst and FinTech roles where I can pair
+                financial judgment with analytics and AI. Quickest reply is by email.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="lg:col-span-7">
+            <div className="grid sm:grid-cols-2 gap-4">
+              {items.map((it,i)=>{
+                const Tag = it.href ? 'a' : 'div';
+                const props = it.href ? { href:it.href, target: it.href.startsWith('http') ? "_blank":undefined, rel:"noopener" } : {};
+                return (
+                  <Reveal key={i} delay={i*70}>
+                    <Tag {...props} className={"card p-5 flex items-center gap-4 "+(it.href?"cursor-pointer hover:border-white/20":"")}>
+                      <span className="h-11 w-11 rounded-xl grid place-items-center bg-white/5 border border-white/10 text-accent2 shrink-0">
+                        <it.icon className="w-5 h-5"/>
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[11px] font-mono uppercase tracking-widest text-inkmute">{it.label}</span>
+                        <span className="block text-ink font-medium truncate">{it.value}</span>
+                      </span>
+                    </Tag>
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =================== FOOTER =================== */
+function Footer(){
+  return (
+    <footer className="border-t border-white/5 py-10">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="font-display text-lg">Shrey Bhatt<span className="text-accent">.</span></div>
+        <div className="text-inkmute text-sm font-mono">© {new Date().getFullYear()} · Built &amp; deployed by Shrey Bhatt</div>
+        <div className="flex gap-4">
+          <a href={LINKS.github} target="_blank" rel="noopener" className="text-inksoft hover:text-white transition"><Icon.github className="w-5 h-5"/></a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener" className="text-inksoft hover:text-white transition"><Icon.linkedin className="w-5 h-5"/></a>
+          <a href={"mailto:"+LINKS.email} className="text-inksoft hover:text-white transition"><Icon.mail className="w-5 h-5"/></a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* =================== APP =================== */
+function App(){
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const p = (h.scrollTop) / (h.scrollHeight - h.clientHeight || 1);
+      setProgress(Math.max(0, Math.min(1, p)) * 100);
+    };
+    onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <>
+      <div className="progress" style={{ width: progress + "%" }}></div>
+      <Nav />
+      <main>
+        <Hero />
+        <About />
+        <Focus />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+requestAnimationFrame(() => {
+  setTimeout(() => { document.getElementById('boot')?.classList.add('hide'); }, 350);
+});
+</script>
+</body>
+</html>
